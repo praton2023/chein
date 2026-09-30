@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1>Perfil de {{ user['full_name'] }}</h1>
+    <p><strong>Usuario:</strong> {{ user['username'] }}</p>
+    <p><strong>Rol:</strong> {{ user['role'] }}</p>
+
+    <form method="post">
+        <label>Dirección</label>
+        <input name="address" value="{{ user['address'] }}">
+
+        <label>Número de tarjeta</label>
+        <input name="card_number" value="{{ user['card_number'] }}">
+
+        <label>Caducidad</label>
+        <input name="card_expiry" value="{{ user['card_expiry'] }}">
+
+        <button type="submit">Guardar cambios</button>
+    </form>
+
+    <p class="muted">La interfaz web no permite modificar el rol de la cuenta.</p>
+</div>
+{% endblock %}

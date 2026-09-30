@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1>LabShop</h1>
+    <p class="muted">Tienda ficticia para el laboratorio de ciberseguridad.</p>
+    <form action="{{ url_for('search_products') }}" method="get">
+        <label for="q">Buscar productos</label>
+        <input id="q" name="q" placeholder="Ej.: teclado" autocomplete="off">
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+
+<div class="grid">
+{% for product in products %}
+    <div class="card">
+        <h2>{{ product['name'] }}</h2>
+        <p>{{ product['description'] }}</p>
+        <p class="price">{{ '%.2f'|format(product['price']) }} €</p>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}

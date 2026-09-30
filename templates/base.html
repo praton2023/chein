@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LabShop CTF</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f4f5f7; color: #222; }
+        nav { background: #111827; color: white; padding: 14px 22px; display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+        nav a { color: white; text-decoration: none; }
+        .container { max-width: 1050px; margin: 30px auto; padding: 0 18px; }
+        .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        input, button { padding: 10px; font-size: 1rem; }
+        input { width: 100%; box-sizing: border-box; margin: 6px 0 12px; }
+        button { cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        .price { font-size: 1.25rem; font-weight: bold; }
+        .error { color: #a00; }
+        .muted { color: #666; }
+        code { background: #eee; padding: 2px 5px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="{{ url_for('index') }}">LabShop</a>
+    <a href="{{ url_for('index') }}">Productos</a>
+    <a href="{{ url_for('osint') }}">OSINT</a>
+    {% if current_user %}
+        <a href="{{ url_for('profile', username=current_user['username']) }}">Mi perfil</a>
+        <a href="{{ url_for('logout') }}">Salir</a>
+    {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+</nav>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

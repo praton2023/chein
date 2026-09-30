@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1>Estado de productos</h1>
+    <p class="muted">Página de consulta para comprobar el estado persistente de la base de datos durante el CTF.</p>
+    <table>
+        <thead><tr><th>ID</th><th>Producto</th><th>Precio</th></tr></thead>
+        <tbody>
+        {% for product in products %}
+        <tr><td>{{ product['id'] }}</td><td>{{ product['name'] }}</td><td>{{ '%.2f'|format(product['price']) }} €</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

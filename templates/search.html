@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1>Resultados de búsqueda</h1>
+    <form action="{{ url_for('search_products') }}" method="get">
+        <input name="q" value="{{ q }}" placeholder="Buscar productos">
+        <button type="submit">Buscar</button>
+    </form>
+    {% if error %}
+        <p class="error">Error SQL: {{ error }}</p>
+    {% endif %}
+</div>
+
+<div class="grid">
+{% for product in products %}
+    <div class="card">
+        <h2>{{ product['name'] }}</h2>
+        <p>{{ product['description'] }}</p>
+        <p class="price">{{ '%.2f'|format(product['price']) }} €</p>
+    </div>
+{% else %}
+    <div class="card"><p>No hay resultados para esta búsqueda.</p></div>
+{% endfor %}
+</div>
+{% endblock %}
