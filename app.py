@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 from functools import wraps
+import logging
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.secret_key = "LAB_ONLY_CHANGE_ME"
@@ -213,7 +215,10 @@ def technician():
     requested_role = request.headers.get("X-Role", "")
 
     if requested_role != "technician":
+        app.logger.warning(f"Technician access DENIED: user={session.get('username')} X-Role={requested_role!r}")
         return render_template("forbidden.html"), 403
+
+    app.logger.warning(f"Technician access GRANTED: user={session.get('username')} X-Role={requested_role!r} — privilege escalation")
 
     conn = get_db()
 
