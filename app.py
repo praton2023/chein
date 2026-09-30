@@ -210,15 +210,21 @@ def api_user_update():
 @app.route("/technician")
 @login_required
 def technician():
-    user = current_user()
-    if not user or user["role"] != "technician":
-        return render_template("forbidden.html", message="Se necesita el rol technician"), 403
+    requested_role = request.headers.get("X-Role", "")
+
+    if requested_role != "technician":
+        return render_template("forbidden.html"), 403
 
     conn = get_db()
-    users = conn.execute(
-        "SELECT username, full_name, address, card_number, card_expiry, role FROM users ORDER BY id"
-    ).fetchall()
+
+    users = conn.execute("""
+        SELECT id, username, full_name, address, card_number, card_expiry, role
+        FROM users
+        ORDER BY id
+    """).fetchall()
+
     conn.close()
+
     return render_template("technician.html", users=users)
 
 
