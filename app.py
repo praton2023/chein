@@ -218,7 +218,7 @@ def technician():
         app.logger.warning(f"Technician access DENIED: user={session.get('username')} X-Role={requested_role!r}")
         return render_template("forbidden.html"), 403
 
-    app.logger.warning(f"Technician access GRANTED: user={session.get('username')} X-Role={requested_role!r} — privilege escalation")
+    app.logger.warning(f"Technician access GRANTED: user={session.get('username')} X-Role={requested_role!r}")
 
     conn = get_db()
 
