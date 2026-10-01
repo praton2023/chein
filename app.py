@@ -340,14 +340,6 @@ def search_products():
     conn.close()
     return render_template("search.html", products=products, categorias=categorias, q=q, error=error)
 
-
-@app.route("/admin/products")
-def admin_products():
-    conn = get_db()
-    products = conn.execute("SELECT * FROM products ORDER BY id").fetchall()
-    conn.close()
-    return render_template("admin_products.html", products=products)
-
 if __name__ == "__main__":
     init_db()
     app.run(host="127.0.0.1", port=5000, debug=False)
