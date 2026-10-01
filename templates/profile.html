@@ -1,23 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card">
-    <h1>Perfil de {{ user['full_name'] }}</h1>
-    <p><strong>Usuario:</strong> {{ user['username'] }}</p>
-    <p><strong>Rol:</strong> {{ user['role'] }}</p>
+<div class="card w-100">
+    <div class="card-body">
+        <h1 class="card-title">Perfil de {{ user['full_name'] }}</h1>
+        <p class="card-text"><strong>Usuario:</strong> {{ user['username'] }}</p>
+        <p class="card-text"><strong>Rol:</strong> {{ user['role'] }}</p>
 
-    <form method="post">
-        <label>Dirección</label>
-        <input name="address" value="{{ user['address'] }}">
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Dirección</label>
+                <input class="form-control" name="address" value="{{ user['address'] }}">
+            </div>
 
-        <label>Número de tarjeta</label>
-        <input name="card_number" value="{{ user['card_number'] }}">
+            <div class="mb-3">
+                <label class="form-label">Número de tarjeta</label>
+                <input class="form-control" name="card_number" value="{{ user['card_number'] }}">
+            </div>
 
-        <label>Caducidad</label>
-        <input name="card_expiry" value="{{ user['card_expiry'] }}">
+            <div class="mb-3">
+                <label class="form-label">Fecha de caducidad de la tarjeta</label>
+                <input class="form-control" name="card_expiry" value="{{ user['card_expiry'] }}">
+            </div>
 
-        <button type="submit">Guardar cambios</button>
-    </form>
+            <button class="btn btn-outline-success" type="submit">Guardar cambios</button>
+        </form>
 
-    <p class="muted">La interfaz web no permite modificar el rol de la cuenta.</p>
+    </div>
 </div>
 {% endblock %}
