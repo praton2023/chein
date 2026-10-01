@@ -51,7 +51,7 @@ def init_db():
                 ("alice", "alice123", "Cliente", "Alice García", "Calle Ficticia 12, Madrid", "4111111111111111", "12/29"),
                 ("bruno", "bruno123", "Cliente", "Bruno Martín", "Avenida Laboratorio 8, Madrid", "5555555555554444", "09/28"),
                 ("carla", "carla123", "Cliente", "Carla López", "Calle CTF 44, Madrid", "378282246310005", "06/30"),
-                ("tecnico", "tecnico123", "Técnico", "Diego Torres", "Calle Servidores 7, Madrid", "6011111111111117", "03/29"),
+                ("tecnico", "tecnico123", "technician", "Diego Torres", "Calle Servidores 7, Madrid", "6011111111111117", "03/29"),
             ],
         )
 
