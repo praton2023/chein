@@ -34,7 +34,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             description TEXT NOT NULL,
-            price REAL NOT NULL
+            price REAL NOT NULL,
+            category TEXT NOT NULL
         );
         """
     )
@@ -56,13 +57,63 @@ def init_db():
 
     if conn.execute("SELECT COUNT(*) FROM products").fetchone()[0] == 0:
         conn.executemany(
-            "INSERT INTO products (name, description, price) VALUES (?, ?, ?)",
+            "INSERT INTO products (name, description, price, category) VALUES (?, ?, ?, ?)",
             [
-                ("Auriculares CTF", "Auriculares inalámbricos para el laboratorio.", 49.99),
-                ("Teclado Mecánico", "Teclado mecánico compacto.", 79.90),
-                ("Ratón Óptico", "Ratón óptico de pruebas.", 24.50),
-                ("Monitor 24 pulgadas", "Monitor Full HD de laboratorio.", 139.99),
-                ("USB de Pruebas", "Memoria USB ficticia para el laboratorio.", 12.00),
+                # Electrónica
+            ("Teléfono Móvil", "Smartphone de última generación", 299.99, "electronica"),
+            ("Ordenador Portátil", "Portátil para trabajo y gaming", 899.50, "electronica"),
+            ("Auriculares Bluetooth", "Auriculares inalámbricos para el laboratorio.", 49.99, "electronica"),
+            ("Televisor Smart TV", "Smart TV 55 pulgadas 4K", 450.00, "electronica"),
+            ("Tablet", "Tablet de 10 pulgadas ligera", 199.99, "electronica"),
+            ("Ratón Inalámbrico", "Ratón óptico de pruebas.", 24.50, "electronica"),
+            ("Teclado Mecánico", "Teclado mecánico compacto.", 79.90, "electronica"),
+            ("Monitor 24 pulgadas", "Monitor Full HD de laboratorio.", 139.99, "electronica"),
+            ("USB de Pruebas", "Memoria USB ficticia para el laboratorio.", 12.00, "electronica"),
+            ("Altavoz Inteligente", "Altavoz con asistente virtual", 59.99, "electronica"),
+            # Hogar
+            ("Sofá de tres plazas", "Sofá cómodo de tela resistente", 350.00, "hogar"),
+            ("Lámpara de pie", "Lámpara de diseño moderno", 45.00, "hogar"),
+            ("Mesa de comedor", "Mesa de madera maciza", 250.00, "hogar"),
+            ("Silla ergonómica", "Silla para oficina en casa", 120.00, "hogar"),
+            ("Alfombra persa", "Alfombra con motivos clásicos", 90.00, "hogar"),
+            ("Microondas", "Microondas de 800W", 65.00, "hogar"),
+            ("Batidora de vaso", "Batidora para smoothies y salsas", 40.00, "hogar"),
+            ("Cuadro decorativo", "Lámina abstracta enmarcada", 35.00, "hogar"),
+            ("Espejo de pared", "Espejo redondo con marco de metal", 55.00, "hogar"),
+            ("Cojín de terciopelo", "Cojín suave para sofá o cama", 15.00, "hogar"),
+            # Ropa
+            ("Camiseta de algodón", "Camiseta básica de manga corta", 12.00, "ropa"),
+            ("Pantalón vaquero", "Vaquero de corte recto azul", 35.00, "ropa"),
+            ("Chaqueta de cuero", "Chaqueta estilo motero negra", 120.00, "ropa"),
+            ("Zapatillas deportivas", "Zapatillas para running ligeras", 60.00, "ropa"),
+            ("Bufanda de lana", "Bufanda gruesa para invierno", 18.00, "ropa"),
+            ("Sombrero de paja", "Sombrero ideal para la playa", 15.00, "ropa"),
+            ("Guantes de invierno", "Guantes térmicos impermeables", 20.00, "ropa"),
+            ("Calcetines estampados", "Pack de 3 calcetines divertidos", 10.00, "ropa"),
+            ("Vestido de noche", "Vestido elegante largo", 80.00, "ropa"),
+            ("Abrigo largo", "Abrigo de paño clásico", 95.00, "ropa"),
+            # Deportes
+            ("Balón de fútbol", "Balón oficial talla 5", 25.00, "deportes"),
+            ("Raqueta de tenis", "Raqueta ligera para principiantes", 85.00, "deportes"),
+            ("Bicicleta de montaña", "Bicicleta con doble suspensión", 450.00, "deportes"),
+            ("Juego de pesas", "Mancuernas ajustables hasta 20kg", 60.00, "deportes"),
+            ("Esterilla de yoga", "Esterilla antideslizante acolchada", 20.00, "deportes"),
+            ("Cuerda de saltar", "Cuerda de velocidad ajustable", 12.00, "deportes"),
+            ("Botas de senderismo", "Botas impermeables transpirables", 90.00, "deportes"),
+            ("Casco de ciclismo", "Casco aerodinámico de seguridad", 45.00, "deportes"),
+            ("Guantes de boxeo", "Guantes de entrenamiento 14oz", 35.00, "deportes"),
+            ("Bañador de natación", "Bañador resistente al cloro", 22.00, "deportes"),
+            # Juguetes
+            ("Muñeca articulada", "Muñeca con varios accesorios", 30.00, "juguetes"),
+            ("Coche teledirigido", "Coche 4x4 RC a batería", 45.00, "juguetes"),
+            ("Puzzle de 1000 piezas", "Puzzle de paisaje de montaña", 15.00, "juguetes"),
+            ("Oso de peluche", "Oso gigante extra suave", 40.00, "juguetes"),
+            ("Juego de mesa de estrategia", "Juego de conquista para 4 jugadores", 50.00, "juguetes"),
+            ("Bloques de construcción", "Set de 500 piezas coloridas", 35.00, "juguetes"),
+            ("Yo-yo luminoso", "Yo-yo dinámico con luces LED", 8.00, "juguetes"),
+            ("Peonza de madera", "Peonza clásica con cuerda", 5.00, "juguetes"),
+            ("Pizarra mágica", "Pizarra para dibujar y borrar", 18.00, "juguetes"),
+            ("Figura de acción", "Figura coleccionable de superhéroe", 25.00, "juguetes"),
             ],
         )
 
@@ -94,14 +145,41 @@ def current_user():
 def inject_current_user():
     return {"current_user": current_user()}
 
+@app.context_processor
+def inject_categorias():
+    conn = get_db()
+    try:
+        # Extraemos las categorías para que estén disponibles en todas las vistas HTML
+        categorias_db = conn.execute("SELECT DISTINCT category FROM products").fetchall()
+        categorias = [row["category"] for row in categorias_db]
+    except sqlite3.OperationalError:
+        categorias = []
+    finally:
+        conn.close()
+    
+    return {"categorias": categorias}
 
 @app.route("/")
 def index():
     conn = get_db()
     products = conn.execute("SELECT * FROM products ORDER BY id").fetchall()
+    
+    categorias_db = conn.execute("SELECT DISTINCT category FROM products").fetchall()
+    categorias = [row["category"] for row in categorias_db]
+    
     conn.close()
-    return render_template("index.html", products=products)
+    return render_template("index.html", products=products, categorias=categorias)
 
+@app.route("/category/<categoria>")
+def show_category(categoria):
+    conn = get_db()
+    products = conn.execute("SELECT * FROM products WHERE category = ? ORDER BY id", (categoria,)).fetchall()
+    
+    categorias_db = conn.execute("SELECT DISTINCT category FROM products").fetchall()
+    categorias = [row["category"] for row in categorias_db]
+    
+    conn.close()
+    return render_template("index.html", products=products, categorias=categorias, categoria_actual=categoria)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -254,9 +332,13 @@ def search_products():
     except sqlite3.Error as exc:
         products = []
         error = str(exc)
+        
+    # Añadimos las categorías aquí también por si la plantilla de búsqueda usa la barra de navegación
+    categorias_db = conn.execute("SELECT DISTINCT category FROM products").fetchall()
+    categorias = [row["category"] for row in categorias_db]
 
     conn.close()
-    return render_template("search.html", products=products, q=q, error=error)
+    return render_template("search.html", products=products, categorias=categorias, q=q, error=error)
 
 
 @app.route("/admin/products")
@@ -265,22 +347,6 @@ def admin_products():
     products = conn.execute("SELECT * FROM products ORDER BY id").fetchall()
     conn.close()
     return render_template("admin_products.html", products=products)
-
-
-@app.route("/osint")
-def osint():
-    return render_template("osint.html")
-
-
-@app.route("/social/reddit")
-def social_reddit():
-    return render_template("reddit.html")
-
-
-@app.route("/social/x")
-def social_x():
-    return render_template("x.html")
-
 
 if __name__ == "__main__":
     init_db()

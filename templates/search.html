@@ -1,25 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card">
-    <h1>Resultados de búsqueda</h1>
-    <form action="{{ url_for('search_products') }}" method="get">
-        <input name="q" value="{{ q }}" placeholder="Buscar productos">
-        <button type="submit">Buscar</button>
-    </form>
-    {% if error %}
-        <p class="error">error: {{ error }}</p>
-    {% endif %}
+
+<!-- Sección de Búsqueda -->
+<div class="card shadow-sm mb-4 w-50">
+    <div class="card-body">
+        <h2 class="card-title mb-3">Resultados de búsqueda</h2>
+        <form action="{{ url_for('search_products') }}" method="get" class="d-flex">
+            <input class="form-control me-2" type="search" name="q" value="{{ q }}" placeholder="Buscar productos...">
+            <button class="btn btn-primary" type="submit">Buscar</button>
+        </form>
+        
+        <!-- Alerta de Error (Útil para ver los errores de sintaxis SQL en la inyección) -->
+        {% if error %}
+            <div class="alert alert-danger mt-3 mb-0" role="alert">
+                <strong>Error de base de datos:</strong> {{ error }}
+            </div>
+        {% endif %}
+    </div>
 </div>
 
-<div class="grid">
-{% for product in products %}
-    <div class="card">
-        <h2>{{ product['name'] }}</h2>
-        <p>{{ product['description'] }}</p>
-        <p class="price">{{ '%.2f'|format(product['price']) }} €</p>
-    </div>
-{% else %}
-    <div class="card"><p>No hay resultados para esta búsqueda.</p></div>
-{% endfor %}
+<!-- Cuadrícula (Grid) de Productos -->
+<div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product['name'] }}</h5>
+                    <p class="card-text text-secondary">{{ product['description'] }}</p>
+                </div>
+                <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
+                    <span class="text-success fw-bold fs-5">{{ '%.2f'|format(product['price']) }} €</span>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Mensaje cuando no hay resultados -->
+        <div class="col-12">
+            <div class="alert alert-info text-center shadow-sm" role="alert">
+                No hay resultados para esta búsqueda.
+            </div>
+        </div>
+    {% endfor %}
 </div>
+
 {% endblock %}
