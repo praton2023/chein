@@ -290,13 +290,38 @@ def api_user_update():
 @app.route("/technician")
 @login_required
 def technician():
-    requested_role = request.headers.get("X-Role", "")
+    username = session.get("username")
 
-    if requested_role != "technician":
-        app.logger.warning(f"Technician access DENIED: user={session.get('username')} X-Role={requested_role!r}")
-        return render_template("forbidden.html"), 403
+    conn = get_db()
+    current_user = conn.execute(
+        "SELECT * FROM users WHERE username = ?",
+        (username,)
+    ).fetchone()
+    conn.close()
 
-    app.logger.warning(f"Technician access GRANTED: user={session.get('username')} X-Role={requested_role!r}")
+    # Comprobación legítima: un técnico real puede acceder
+    if current_user and current_user["role"] == "technician":
+        app.logger.info(
+            f"Technician access GRANTED (legitimate): "
+            f"user={username} role={current_user['role']}"
+        )
+
+    else:
+        # Vulnerabilidad intencionada:
+        # se confía en una cabecera controlada por el cliente
+        requested_role = request.headers.get("X-Role", "")
+
+        if requested_role != "technician":
+            app.logger.warning(
+                f"Technician access DENIED: "
+                f"user={username} X-Role={requested_role!r}"
+            )
+            return render_template("forbidden.html"), 403
+
+        app.logger.warning(
+            f"Technician access GRANTED via header: "
+            f"user={username} X-Role={requested_role!r}"
+        )
 
     conn = get_db()
 
