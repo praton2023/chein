@@ -207,7 +207,7 @@ def sign_in():
         username = request.form.get("username", "")
         password = request.form.get("password", "")
 
-        return render_template("bromita.html", error="No puedes registrarte, tienes que ser chino\n切恩万岁")
+        return render_template("bromita.html", error="Tú no poder registrar,tú tener que ser chino\n切恩万岁")
     return render_template("sign_in.html")
 
 @app.route("/logout")
