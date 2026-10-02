@@ -201,6 +201,14 @@ def login():
 
     return render_template("login.html")
 
+@app.route("/sign_in", methods=["GET", "POST"])
+def sign_in():
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+
+        return render_template("bromita.html", error="No puedes registrarte, tienes que ser chino\n切恩万岁")
+    return render_template("sign_in.html")
 
 @app.route("/logout")
 def logout():

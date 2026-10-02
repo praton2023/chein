@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Estilos específicos para el fondo de esta página -->
+<style>
+    .fondo-registro {
+        /* Carga la imagen desde la carpeta static de Flask */
+        background-image: url("{{ url_for('static', filename='img/DragoniteChino.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        
+        /* Ajustes para que ocupe toda la pantalla y centre la tarjeta */
+        min-height: 80vh; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px; /* Opcional: redondea los bordes del fondo si no ocupa el 100% */
+    }
+    
+    /* Efecto translúcido para que la tarjeta destaque sobre el fondo */
+    .card-translucida {
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+</style>
+
+<div class="fondo-registro">
+    <div class="card w-50 card-translucida">
+        <div class="card-body">
+            <h1 class="card-title text-center mb-4">Registrarse</h1>
+            
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            
+            <!-- Aquí irá el <form> de registro -->
+        </div>
+    </div>
+</div>
+{% endblock %}
