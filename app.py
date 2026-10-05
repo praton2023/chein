@@ -59,7 +59,6 @@ def init_db():
         conn.executemany(
             "INSERT INTO products (name, description, price, category) VALUES (?, ?, ?, ?)",
             [
-                # Electrónica
             ("Teléfono Móvil", "Smartphone de última generación", 299.99, "electronica"),
             ("Ordenador Portátil", "Portátil para trabajo y gaming", 899.50, "electronica"),
             ("Auriculares Bluetooth", "Auriculares inalámbricos para el laboratorio.", 49.99, "electronica"),
@@ -70,7 +69,6 @@ def init_db():
             ("Monitor 24 pulgadas", "Monitor Full HD de laboratorio.", 139.99, "electronica"),
             ("USB de Pruebas", "Memoria USB ficticia para el laboratorio.", 12.00, "electronica"),
             ("Altavoz Inteligente", "Altavoz con asistente virtual", 59.99, "electronica"),
-            # Hogar
             ("Sofá de tres plazas", "Sofá cómodo de tela resistente", 350.00, "hogar"),
             ("Lámpara de pie", "Lámpara de diseño moderno", 45.00, "hogar"),
             ("Mesa de comedor", "Mesa de madera maciza", 250.00, "hogar"),
@@ -81,7 +79,6 @@ def init_db():
             ("Cuadro decorativo", "Lámina abstracta enmarcada", 35.00, "hogar"),
             ("Espejo de pared", "Espejo redondo con marco de metal", 55.00, "hogar"),
             ("Cojín de terciopelo", "Cojín suave para sofá o cama", 15.00, "hogar"),
-            # Ropa
             ("Camiseta de algodón", "Camiseta básica de manga corta", 12.00, "ropa"),
             ("Pantalón vaquero", "Vaquero de corte recto azul", 35.00, "ropa"),
             ("Chaqueta de cuero", "Chaqueta estilo motero negra", 120.00, "ropa"),
@@ -92,7 +89,6 @@ def init_db():
             ("Calcetines estampados", "Pack de 3 calcetines divertidos", 10.00, "ropa"),
             ("Vestido de noche", "Vestido elegante largo", 80.00, "ropa"),
             ("Abrigo largo", "Abrigo de paño clásico", 95.00, "ropa"),
-            # Deportes
             ("Balón de fútbol", "Balón oficial talla 5", 25.00, "deportes"),
             ("Raqueta de tenis", "Raqueta ligera para principiantes", 85.00, "deportes"),
             ("Bicicleta de montaña", "Bicicleta con doble suspensión", 450.00, "deportes"),
@@ -103,7 +99,6 @@ def init_db():
             ("Casco de ciclismo", "Casco aerodinámico de seguridad", 45.00, "deportes"),
             ("Guantes de boxeo", "Guantes de entrenamiento 14oz", 35.00, "deportes"),
             ("Bañador de natación", "Bañador resistente al cloro", 22.00, "deportes"),
-            # Juguetes
             ("Muñeca articulada", "Muñeca con varios accesorios", 30.00, "juguetes"),
             ("Coche teledirigido", "Coche 4x4 RC a batería", 45.00, "juguetes"),
             ("Puzzle de 1000 piezas", "Puzzle de paisaje de montaña", 15.00, "juguetes"),
@@ -149,7 +144,6 @@ def inject_current_user():
 def inject_categorias():
     conn = get_db()
     try:
-        # Extraemos las categorías para que estén disponibles en todas las vistas HTML
         categorias_db = conn.execute("SELECT DISTINCT category FROM products").fetchall()
         categorias = [row["category"] for row in categorias_db]
     except sqlite3.OperationalError:
@@ -227,8 +221,7 @@ def profile(username):
         return render_template("forbidden.html", message="Perfil no encontrado"), 404
 
     if request.method == "POST":
-        # La interfaz normal solo permite editar datos personales.
-        # El campo role NO se acepta aquí.
+
         address = request.form.get("address", "")
         card_number = request.form.get("card_number", "")
         card_expiry = request.form.get("card_expiry", "")
@@ -274,8 +267,7 @@ def api_user_update():
         conn.close()
         return {"error": "Usuario no encontrado"}, 404
 
-    # Vulnerabilidad intencionada: no se comprueba que el usuario pueda
-    # modificar el rol ni que el atributo role deba ser solo servidor-side.
+   
     conn.execute(
         """
         UPDATE users
@@ -307,7 +299,6 @@ def technician():
     ).fetchone()
     conn.close()
 
-    # Comprobación legítima: un técnico real puede acceder
     if current_user and current_user["role"] == "technician":
         app.logger.info(
             f"Technician access GRANTED (legitimate): "
@@ -315,8 +306,7 @@ def technician():
         )
 
     else:
-        # Vulnerabilidad intencionada:
-        # se confía en una cabecera controlada por el cliente
+
         requested_role = request.headers.get("X-Role", "")
 
         if requested_role != "technician":
@@ -349,10 +339,6 @@ def search_products():
     q = request.args.get("q", "")
     conn = get_db()
 
-    # DELIBERATE VULNERABILITY: SQL injection from the search box.
-    # A crafted value can close the LIKE string and append another SQL
-    # statement. The endpoint then re-reads the products so the result
-    # visibly reflects persistent changes to the database.
     script = "SELECT * FROM products WHERE name LIKE '%" + q + "%'"
     error = None
 
@@ -366,7 +352,6 @@ def search_products():
         products = []
         error = str(exc)
         
-    # Añadimos las categorías aquí también por si la plantilla de búsqueda usa la barra de navegación
     categorias_db = conn.execute("SELECT DISTINCT category FROM products").fetchall()
     categorias = [row["category"] for row in categorias_db]
 
